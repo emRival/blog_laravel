@@ -8,14 +8,14 @@
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 
     <style>
-    .body {
-        padding: 6px;
-        border-bottom: 2px solid red;
-    }
+        .body {
+            padding: 6px;
+            border-bottom: 2px solid red;
+        }
 
-    span {
-        color: aqua;
-    }
+        span {
+            color: aqua;
+        }
     </style>
 </head>
 
@@ -43,6 +43,8 @@
         @endforeach
 
     </div>
+
+
 
     <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js')}}"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
