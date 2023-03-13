@@ -15,12 +15,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Storage::get('posts.txt');
-        $posts = explode("\n", $posts);
+        $posts = DB::table('posts')
+            ->get();
 
         $data = [
             'posts' => $posts
         ];
+
         return view('posts.index', $data);
     }
 
@@ -47,7 +48,10 @@ class PostController extends Controller
 
         DB::table('posts')->insert([
             'title' => $title,
-            'content' => $content
+            'content' => $content,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+
         ]);
 
         return redirect('posts');
@@ -62,16 +66,11 @@ class PostController extends Controller
     public function show($id)
     {
 
-        $posts = Storage::get('posts.txt');
-        $posts = explode("\n", $posts);
-        $selected_post = array();
-
-        foreach ($posts as $p) {
-            $p = explode(",", $p);
-            if ($p[0] == $id) {
-                $selected_post = $p;
-            }
-        }
+        // "SELECT * FROM posts WHERE id = $id"
+        $selected_post = DB::table('posts')
+            ->select('id', 'title', 'content', 'created_at')
+            ->where('id', $id)
+            ->first();
 
         $data = [
             'post' => $selected_post
@@ -89,7 +88,16 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        echo "ini adalah halaman edit data dari idn = $id";
+        $selected_post = DB::table('posts')
+            ->select('id', 'title', 'content', 'created_at')
+            ->where('id', $id)
+            ->first();
+
+        $data = [
+            'post' => $selected_post
+        ];
+
+        return view('posts.edit', $data);
     }
 
     /**
