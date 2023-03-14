@@ -109,7 +109,19 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $title = $request->input('title');
+        $content = $request->input('content');
+
+        // ? "UPDATE .... Where id = $id"
+        DB::table('posts')
+                ->where('id', $id)
+                ->update([
+                    'title' => $title,
+                    'content' => $content,
+                    'updated_at' => date("Y-m-d H:i:s")
+                ]);
+
+                return redirect("posts/{$id}");
     }
 
     /**
@@ -120,6 +132,10 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        
+        DB::table('posts')
+                ->where('id', $id)
+                ->delete();
+
+                return redirect('posts');
     }
 }
