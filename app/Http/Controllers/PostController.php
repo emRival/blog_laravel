@@ -136,6 +136,6 @@ class PostController extends Controller
                 ->where('id', $id)
                 ->delete();
 
-               
+                return redirect('posts');
     }
 }
