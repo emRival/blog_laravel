@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -15,9 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = DB::table('posts')
-            ->where('active', true)
-            ->get();
+        $posts = Post::active()->get();
 
         $data = [
             'posts' => $posts
@@ -47,7 +46,7 @@ class PostController extends Controller
         $title = $request->input('title');
         $content = $request->input('content');
 
-        DB::table('posts')->insert([
+        Post::insert([
             'title' => $title,
             'content' => $content,
             'created_at' => date('Y-m-d H:i:s'),
@@ -68,10 +67,7 @@ class PostController extends Controller
     {
 
         // "SELECT * FROM posts WHERE id = $id"
-        $selected_post = DB::table('posts')
-            ->select('id', 'title', 'content', 'created_at')
-            ->where('id', $id)
-            ->first();
+        $selected_post = Post::selectById($id)->first();
 
         $data = [
             'post' => $selected_post
@@ -89,10 +85,7 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        $selected_post = DB::table('posts')
-            ->select('id', 'title', 'content', 'created_at')
-            ->where('id', $id)
-            ->first();
+        $selected_post = Post::selectById($id)->first();
 
         $data = [
             'post' => $selected_post
@@ -114,8 +107,7 @@ class PostController extends Controller
         $content = $request->input('content');
 
         // ? "UPDATE .... Where id = $id"
-        DB::table('posts')
-                ->where('id', $id)
+        Post::selectById($id)
                 ->update([
                     'title' => $title,
                     'content' => $content,
@@ -133,10 +125,27 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('posts')
-                ->where('id', $id)
-                ->delete();
+        Post::selectById($id)->delete();
 
-                return redirect('posts');
+        return redirect('posts');
+    }
+
+    public function trash() {
+        $trash_item = Post::onlyTrashed()->get();
+
+        // dd($trash_item);
+
+        $data = [
+            'posts' => $trash_item
+        ];
+
+        return view('posts.recyclebin', $data);
+    }
+
+    public function permanent_delete($id) {
+
+        Post::selectById($id)->forceDelete();
+
+        return redirect('posts/trash');
     }
 }

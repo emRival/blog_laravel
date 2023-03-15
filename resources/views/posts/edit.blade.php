@@ -32,17 +32,16 @@
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
 
-            
+        </form>
+
              {{-- * form hapus data --}}
-            <form action="{{ url("posts/$post->id")}}" method="post">
+             <form action="{{ url("posts/$post->id")}}" method="post">
                 @method('DELETE')
                 @csrf
     
-                <button type="submit"class="btn btn-danger">Hapus</button>
+                <button type="submit"class="btn btn-danger my-4">Hapus</button>
     
             </form>
-
-        </form>
 
         
 

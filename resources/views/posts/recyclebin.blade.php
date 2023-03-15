@@ -23,9 +23,7 @@
 
     <div class="container my-4">
         <h1>
-            Blog-Ku <a href="{{ url('posts/create') }}" class="btn btn-warning">+ Buat Post</a>
-
-            <a href="{{ url('posts/trash') }}" class="btn btn-danger">Riwayat Hapus</a>
+            Blog-Ku <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
         </h1>
 
         @foreach($posts as $p)
@@ -37,8 +35,15 @@
                 <p class="card-text"><small class="text-muted">Created At
                         {{ date("d M Y H:i", strtotime($p->created_at)) }}
                     </small> </p>
-                <a href="{{ url("posts/$p->id") }}" class="btn btn-primary">Selengkapnya</a>
-                <a href="{{ url("posts/$p->id/edit") }}" class="btn btn-warning">Edit</a>
+
+                    {{-- * form hapus data --}}
+             <form action="{{ url("posts/$p->id/permanent")}}" method="post">
+                @method('DELETE')
+                @csrf
+    
+                <button type="submit"class="btn btn-primary my-4">Hapus Permanen</button>
+    
+            </form>
             </div>
         </div>
 
