@@ -36,7 +36,7 @@
                         {{ date("d M Y H:i", strtotime($p->created_at)) }}
                     </small> </p>
 
-                    {{-- * form hapus data --}}
+            {{-- * form hapus data --}}
              <form action="{{ url("posts/$p->id/permanent")}}" method="post">
                 @method('DELETE')
                 @csrf

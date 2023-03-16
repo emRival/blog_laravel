@@ -12,6 +12,11 @@ class Post extends Model
     use SoftDeletes;
 
 
+    public function comments() {
+        return $this->hasMany(comments::class);
+    }
+
+
     public function scopeActive($query){
         return $query->where('active', true);
     }
