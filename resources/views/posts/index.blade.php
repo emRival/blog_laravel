@@ -26,7 +26,9 @@
             Blog-Ku <a href="{{ url('posts/create') }}" class="btn btn-warning">+ Buat Post</a>
 
             <a href="{{ url('posts/trash') }}" class="btn btn-danger">Riwayat Hapus</a>
+            
         </h1>
+        <p class="text-muted">Total Postingan Aktif : <span class="badge bg-success">100</span>  / Total postingan non Aktif : <span class="badge bg-warning">5</span>  / Total postingan dihapus : <span class="badge bg-danger">3</span> </p>
 
         @foreach($posts as $p)
 

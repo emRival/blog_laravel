@@ -44,6 +44,14 @@
                 <button type="submit"class="btn btn-primary my-4">Hapus Permanen</button>
     
             </form>
+
+            <form action="{{ url("posts/$p->id/restore")}}" method="post">
+                @method('DELETE')
+                @csrf
+    
+                <button type="submit"class="btn btn-warning my-4">restore</button>
+    
+            </form>
             </div>
         </div>
 

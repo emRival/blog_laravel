@@ -17,6 +17,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::active()->get();
+        $total_active = $posts->count();
+        $total_nonActive = 
 
         $data = [
             'posts' => $posts
@@ -68,10 +70,16 @@ class PostController extends Controller
 
         // "SELECT * FROM posts WHERE id = $id"
         $selected_post = Post::selectById($id)->first();
+        $comments = $selected_post->comments()->get();
+        $total_comments = $comments->count();
+
 
         $data = [
-            'post' => $selected_post
+            'post'               => $selected_post,
+            'comments'           => $comments,
+            'total_comments'     => $total_comments
         ];
+
 
 
         return view('posts.show', $data);
@@ -147,5 +155,10 @@ class PostController extends Controller
         Post::selectById($id)->forceDelete();
 
         return redirect('posts/trash');
+    }
+
+    public function restore($id) {
+        Post::selectById($id)->withTrashed()->restore();
+        return redirect('posts');
     }
 }
