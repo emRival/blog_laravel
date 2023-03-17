@@ -28,7 +28,10 @@
             <a href="{{ url('posts/trash') }}" class="btn btn-danger">Riwayat Hapus</a>
             
         </h1>
-        <p class="text-muted">Total Postingan Aktif : <span class="badge bg-success">100</span>  / Total postingan non Aktif : <span class="badge bg-warning">5</span>  / Total postingan dihapus : <span class="badge bg-danger">3</span> </p>
+        <p class="text-muted">Total Postingan Aktif : <span class="badge bg-success">
+            {{ $total_active }}</span>  / Total postingan non Aktif : 
+            <span class="badge bg-warning">
+                {{ $total_nonActive }}</span>  / Total postingan dihapus : <span class="badge bg-danger">{{ $total_dihapus }}</span> </p>
 
         @foreach($posts as $p)
 

@@ -17,9 +17,10 @@ class Post extends Model
     }
 
 
-    public function scopeActive($query){
-        return $query->where('active', true);
+    public function scopeStatus($query, $bool){
+        return $query->where('active', $bool);
     }
+
 
     public function scopeSelectById($query, $id) {
         return $query->where('id', $id );

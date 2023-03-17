@@ -16,12 +16,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::active()->get();
+        $posts = Post::status(true)->get();
         $total_active = $posts->count();
-        $total_nonActive = 
+        $total_nonActive = Post::status(false)->count();
+        $total_dihapus = Post::onlyTrashed()->count();
+
+        // dd($total_dihapus);
+
 
         $data = [
-            'posts' => $posts
+            'posts' => $posts,
+            'total_active' => $total_active,
+            'total_nonActive' => $total_nonActive,
+            'total_dihapus' => $total_dihapus
         ];
 
         return view('posts.index', $data);
