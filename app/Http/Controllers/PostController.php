@@ -55,11 +55,9 @@ class PostController extends Controller
         $title = $request->input('title');
         $content = $request->input('content');
 
-        Post::insert([
+        Post::create([
             'title' => $title,
             'content' => $content,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
 
         ]);
 
@@ -72,13 +70,19 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-
-        // "SELECT * FROM posts WHERE id = $id"
-        $selected_post = Post::selectById($id)->first();
+        $selected_post = Post::where('slug', $slug)->first();
         $comments = $selected_post->comments()->get();
         $total_comments = $comments->count();
+
+
+    
+
+        // "SELECT * FROM posts WHERE id = $id"
+        // $selected_post = Post::selectById($id)->first();
+        // $comments = $selected_post->comments()->get();
+        // $total_comments = $comments->count();
 
 
         $data = [
@@ -98,9 +102,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($slug)
     {
-        $selected_post = Post::selectById($id)->first();
+        $selected_post = Post::where('slug', $slug)->first();
 
         $data = [
             'post' => $selected_post
@@ -116,20 +120,22 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $slug)
     {
-        $title = $request->input('title');
-        $content = $request->input('content');
+        $input = $request->all();
+
+        // dd($slug, $title, $content);
 
         // ? "UPDATE .... Where id = $id"
-        Post::selectById($id)
-                ->update([
-                    'title' => $title,
-                    'content' => $content,
-                    'updated_at' => date("Y-m-d H:i:s")
-                ]);
+        Post::where('slug', $slug)->update([
+            'title' => $input['title'],
+            'content' => $input['content'],
+            'slug' => preg_replace('/[^A-Za-z0-9-]+/', '-', $input['title'])
+        ]);
 
-                return redirect("posts/{$id}");
+        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $input['title']);
+
+        return redirect("posts/$slug");
     }
 
     /**

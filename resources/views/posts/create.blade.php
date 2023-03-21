@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Create Post</title>
-
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
-</head>
-
-<body>
-
-    <div class="container">
+@extends('layouts.app')
+@section('title', "Buat Post Baru")
+@section('content')
         <h1 class="my-4">Buat Post Baru</h1>
 
         <form method="post" action="{{ url('posts') }}">
@@ -29,12 +17,4 @@
 
         </form>
 
-
-    </div>
-
-
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js')}}" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-    </script>
-</body>
-
-</html>
+        @endsection

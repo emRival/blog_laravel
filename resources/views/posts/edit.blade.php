@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Edit Postingan</title>
-
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
-</head>
-
-<body>
-
-
-
-    <div class="container">
+@extends('layouts.app')
+@section('title', "Edit Postingan")
+@section('content')
         <h1 class="my-4">Edit Postingan</h1>
 
-        <form method="post" action="{{ url("posts/$post->id") }}">
+        <form method="post" action="{{ url("posts/$post->slug") }}">
             @method('patch')
             @csrf
             <div class="mb-3">
@@ -32,27 +17,38 @@
             </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
 
+            <button type="button"class="btn btn-danger my-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus</button>
+
         </form>
 
              {{-- * form hapus data --}}
-             <form action="{{ url("posts/$post->id")}}" method="post">
+             {{-- <form action="{{ url("posts/$post->id")}}" method="post">
                 @method('DELETE')
                 @csrf
     
-                <button type="submit"class="btn btn-danger my-4">Hapus</button>
+                
     
+            </form> --}}
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Hapus Postingan</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Apakah Anda yakin Untuk Menghapus Postingan "<span class="text-danger fw-bold">{{ $post->title }}</span>" 
+        </div>
+        <div class="modal-footer">
+            <form action="{{ url("posts/$post->id")}}" method="post">
+                @method('DELETE')
+                @csrf
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Ya</button>
             </form>
-
-        
-
-
-
+        </div>
+      </div>
     </div>
-
-
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js')}}"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-    </script>
-</body>
-
-</html>
+  </div>
+@endsection

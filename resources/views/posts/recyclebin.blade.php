@@ -1,29 +1,8 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Blog</title>
-
-    <link href="{{ asset('bootstrap/css/bootstrap.min.css')}}" rel="stylesheet"
-        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-
-    <style>
-        .body {
-            padding: 6px;
-            border-bottom: 2px solid red;
-        }
-
-        span {
-            color: aqua;
-        }
-    </style>
-</head>
-
-<body>
-
-    <div class="container my-4">
+@extends('layouts.app')
+@section('title', "Histori Hapus")
+@section('content')
         <h1>
-            Blog-Ku <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
+            Histori Hapus <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
         </h1>
 
         @foreach($posts as $p)
@@ -57,14 +36,4 @@
 
         @endforeach
 
-    </div>
-
-
-
-    <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js')}}"
-        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous">
-    </script>
-</body>
-</body>
-
-</html>
+   @endsection
