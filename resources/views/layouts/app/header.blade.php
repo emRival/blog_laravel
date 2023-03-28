@@ -18,8 +18,32 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-warning">Sign-up</button>
+          @guest
+          <a href="{{ url("login")}}" class="btn btn-outline-light me-2">
+            Login
+        </a>
+        <a href="{{ url("register")}}" class="btn btn-warning me-2">
+          Register
+      </a>
+      @else
+
+      
+      
+      <div class="dropdown-center">
+        <button class="btn btn-outline-dark text-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}" alt="..."
+          class="img-fluid me-1" style="max-width: 14%; height: auto;border-radius: 50%;">
+          {{ Auth::user()->name }} 
+          
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="{{ url("logout")}}"><i class="fa-solid fa-right-from-bracket"></i> logout</a></li>
+        </ul>
+      </div>
+      
+      @endguest
+           
+
         </div>
       </div>
     </div>

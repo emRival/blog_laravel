@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,8 +15,17 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    //  public function __construct(){
+    //     $this->middleware('auth');
+    //  }
     public function index()
     {
+
+        if(!Auth::check()) {
+            return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        }
+
         $posts = Post::status(true)->get();
         $total_active = $posts->count();
         $total_nonActive = Post::status(false)->count();
@@ -41,6 +51,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         return view('posts.create');
     }
 
@@ -52,6 +65,9 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         $title = $request->input('title');
         $content = $request->input('content');
 
@@ -72,6 +88,9 @@ class PostController extends Controller
      */
     public function show($slug)
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         $selected_post = Post::where('slug', $slug)->first();
         $comments = $selected_post->comments()->get();
         $total_comments = $comments->count();
@@ -104,6 +123,9 @@ class PostController extends Controller
      */
     public function edit($slug)
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         $selected_post = Post::where('slug', $slug)->first();
 
         $data = [
@@ -122,6 +144,9 @@ class PostController extends Controller
      */
     public function update(Request $request, $slug)
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         $input = $request->all();
 
         // dd($slug, $title, $content);
@@ -146,12 +171,18 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         Post::selectById($id)->delete();
 
         return redirect('posts');
     }
 
     public function trash() {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         $trash_item = Post::onlyTrashed()->get();
 
         // dd($trash_item);
@@ -164,6 +195,9 @@ class PostController extends Controller
     }
 
     public function permanent_delete($id) {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
 
         Post::selectById($id)->forceDelete();
 
@@ -171,6 +205,9 @@ class PostController extends Controller
     }
 
     public function restore($id) {
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
         Post::selectById($id)->withTrashed()->restore();
         return redirect('posts');
     }

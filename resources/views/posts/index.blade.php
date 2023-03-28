@@ -1,6 +1,18 @@
 @extends('layouts.app')
 @section('title', "Beranda")
 @section('content')
+
+@if (session()->has('login-success'))
+  <div class="alert alert-success">
+    <i class="fa-solid fa-thumbs-up"></i>
+      {{ session()->get('login-success') }}
+  </div>
+@endif
+@if (session()->has('failed_open_login'))
+  <div class="alert alert-success">
+      Anda sudah login !!
+  </div>
+@endif
         <h1>
             Blog-Ku <a href="{{ url('posts/create') }}" class="btn btn-warning">+ Buat Post</a>
 
