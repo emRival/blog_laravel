@@ -45,26 +45,30 @@ class AuthController extends Controller
     }
 
     public function register_form() {
+
+        if(Auth::check()) {
+            return redirect('posts')->with('failed_open_login','');
+        }
         return view('auth.register');
     }
 
-    public function register(Request $request) {
+    // public function register(Request $request) {
 
-        $request->validate([
-            'name'      => 'required|min:3|max:10',
-            'email'     => 'required|email|unique:users',
-            'password'  => 'required|min:4|max:6|confirmed'
-        ]);
+    //     $request->validate([
+    //         'name'      => 'required|min:3|max:10',
+    //         'email'     => 'required|email|unique:users',
+    //         'password'  => 'required|min:4|max:6|confirmed'
+    //     ]);
 
 
-        User::create([
-            'name'      => $request->input('name'),
-            'email'     => $request->input('email'),
-            'password'  => Hash::make($request->input('password'))
-        ]);
+    //     User::create([
+    //         'name'      => $request->input('name'),
+    //         'email'     => $request->input('email'),
+    //         'password'  => Hash::make($request->input('password'))
+    //     ]);
 
-        return redirect('login');
+    //     return redirect('login');
 
-    }
+    // }
 
 }
