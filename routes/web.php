@@ -17,12 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 //AUTH
-Route::get('login', [AuthController::class, 'login'])->name('login');
-Route::post('login', [AuthController::class, 'authenticate']);
-Route::get('logout', [AuthController::class, 'logout']);
+// Route::get('login', [AuthController::class, 'login'])->name('login');
+// Route::post('login', [AuthController::class, 'authenticate']);
+// Route::get('logout', [AuthController::class, 'logout']);
 // Route::get('register', [AuthController::class, 'register_form'])->name('register');
 // //route register from fortify
 

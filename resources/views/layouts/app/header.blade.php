@@ -19,13 +19,13 @@
 
         <div class="text-end">
           @guest
-          <a href="{{ url("login")}}" class="btn btn-outline-light me-2">
+          <a href="{{ route("login")}}" class="btn btn-outline-light me-2">
             Login
         </a>
-        <a href="{{ url("register")}}" class="btn btn-warning me-2">
+        <a href="{{ route("register")}}" class="btn btn-warning me-2">
           Register
       </a>
-      @else
+          @else
 
       
       
@@ -37,7 +37,15 @@
           
         </button>
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="{{ url("logout")}}"><i class="fa-solid fa-right-from-bracket"></i> logout</a></li>
+          <li>
+            <a class="dropdown-item" href="{{ route("logout") }}" 
+            onclick="event.preventDefault(); document.getElementById('form-logout').submit();"
+            ><i class="fa-solid fa-right-from-bracket"></i> logout</a>
+          </li>
+
+          <form action="{{ route('logout') }}" method="post" id="form-logout">
+            @csrf
+          </form>
         </ul>
       </div>
       
