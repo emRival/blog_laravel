@@ -30,7 +30,7 @@ Route::get('/', function () {
 
 
 //content
-Route::get('posts', [PostController::class, 'index']);
+Route::get('posts', [PostController::class, 'index'])->name('post');
 Route::get('posts/create', [PostController::class, 'create']);
 
 Route::get('posts/trash', [PostController::class, 'trash']);
