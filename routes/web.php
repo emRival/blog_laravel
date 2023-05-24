@@ -19,14 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index']);
 
-//AUTH
-// Route::get('login', [AuthController::class, 'login'])->name('login');
-// Route::post('login', [AuthController::class, 'authenticate']);
-// Route::get('logout', [AuthController::class, 'logout']);
-// Route::get('register', [AuthController::class, 'register_form'])->name('register');
-// //route register from fortify
-
-// Route::post('register', [AuthController::class, 'register']);
 
 
 //content

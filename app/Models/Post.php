@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -16,20 +17,19 @@ class Post extends Model
     protected $fillable = [
         'title',
         'content',
-        'slug'
+        'slug',
+        'image',
+        'user_id',
     ];
 
-    public static function boot() {
-        parent::boot();
+    // public static function boot() {
+    //     parent::boot();
 
-        static::creating(function($post) {
-            $post->slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $post->title);
-        });
+    //     static::creating(function($post) {
+    //         $post->slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $post->title);
+    //     });
 
-        static::updating(function($post) {
-            $post->slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $post->title);
-        });
-    }
+    // }
 
 
     public function comments() {
@@ -44,5 +44,15 @@ class Post extends Model
 
     public function scopeSelectById($query, $id) {
         return $query->where('id', $id );
+    }
+
+    /**
+     * Get the user that owns the Post
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function postwriter(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

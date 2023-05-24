@@ -14,43 +14,43 @@ use Illuminate\Support\Facades\Storage;
 class AuthController extends Controller
 {
 
-    public function login()
-    {
-        if(Auth::check()) {
-            return redirect('posts')->with('failed_open_login','');
-        }
-        return view('auth.login');
+    // public function login()
+    // {
+    //     if(Auth::check()) {
+    //         return redirect('posts')->with('failed_open_login','');
+    //     }
+    //     return view('auth.login');
 
-    }
+    // }
 
-    public function authenticate(Request $request)
-    {
+    // public function authenticate(Request $request)
+    // {
 
-        $credential = $request->only('email', 'password');
-        
-        if(Auth::attempt($credential)){
-            $user = Auth::user()->name;
-                return redirect('posts')->with('login-success', "login berhasil, Selamat datang {$user}");
-        } else {
-                return redirect('login')->with('error_message', 'wrong email or password');
-        }
-        
-    }
+    //     $credential = $request->only('email', 'password');
 
-    public function logout() {
-        Session::flush();
-        Auth::logout();
+    //     if(Auth::attempt($credential)){
+    //         $user = Auth::user()->name;
+    //             return redirect('posts')->with('login-success', "login berhasil, Selamat datang {$user}");
+    //     } else {
+    //             return redirect('login')->with('error_message', 'wrong email or password');
+    //     }
 
-        return redirect('login')->with('logout', 'BERHASIL !!!');
-    }
+    // }
 
-    public function register_form() {
+    // public function logout() {
+    //     Session::flush();
+    //     Auth::logout();
 
-        if(Auth::check()) {
-            return redirect('posts')->with('failed_open_login','');
-        }
-        return view('auth.register');
-    }
+    //     return redirect('login')->with('logout', 'BERHASIL !!!');
+    // }
+
+    // public function register_form() {
+
+    //     if(Auth::check()) {
+    //         return redirect('posts')->with('failed_open_login','');
+    //     }
+    //     return view('auth.register');
+    // }
 
     // public function register(Request $request) {
 

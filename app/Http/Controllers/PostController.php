@@ -24,9 +24,6 @@ class PostController extends Controller
     public function index()
     {
 
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
 
         $posts = Post::status(true)->get();
         $total_active = $posts->count();
@@ -40,7 +37,8 @@ class PostController extends Controller
             'posts' => $posts,
             'total_active' => $total_active,
             'total_nonActive' => $total_nonActive,
-            'total_dihapus' => $total_dihapus
+            'total_dihapus' => $total_dihapus,
+
         ];
 
         return view('posts.index', $data);
@@ -53,9 +51,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         return view('posts.create');
     }
 
@@ -65,17 +61,18 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Validasi $request)
+    public function store(Request $request)
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
+
+        $title = $request->input('title'); // Ambil judul dari input
 
 
         Post::create([
-            'title' =>$request->input('title'),
+            'title' => $title,
             'content' => $request->input('konten'),
-
+            'user_id' => Auth::user()->id,
+            'slug' => $this->makeSlug($title),
         ]);
 
         return redirect('posts');
@@ -89,21 +86,10 @@ class PostController extends Controller
      */
     public function show($slug)
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         $selected_post = Post::where('slug', $slug)->first();
         $comments = $selected_post->comments()->get();
         $total_comments = $comments->count();
-
-
-
-
-        // "SELECT * FROM posts WHERE id = $id"
-        // $selected_post = Post::selectById($id)->first();
-        // $comments = $selected_post->comments()->get();
-        // $total_comments = $comments->count();
-
 
         $data = [
             'post'               => $selected_post,
@@ -124,10 +110,10 @@ class PostController extends Controller
      */
     public function edit($slug)
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         $selected_post = Post::where('slug', $slug)->first();
+
+
 
         $data = [
             'post' => $selected_post
@@ -145,9 +131,7 @@ class PostController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         $input = $request->all();
 
         // dd($slug, $title, $content);
@@ -156,10 +140,10 @@ class PostController extends Controller
         Post::where('slug', $slug)->update([
             'title' => $input['title'],
             'content' => $input['content'],
-            'slug' => preg_replace('/[^A-Za-z0-9-]+/', '-', $input['title'])
+            'slug' => $this->makeSlug($input['title']),
         ]);
 
-        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $input['title']);
+        $slug = $this->makeSlug($input['title']);
 
         return redirect("posts/$slug");
     }
@@ -172,18 +156,14 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         Post::selectById($id)->delete();
 
         return redirect('posts');
     }
 
     public function trash() {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         $trash_item = Post::onlyTrashed()->get();
 
         // dd($trash_item);
@@ -196,9 +176,7 @@ class PostController extends Controller
     }
 
     public function permanent_delete($id) {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
 
         Post::selectById($id)->forceDelete();
 
@@ -206,10 +184,19 @@ class PostController extends Controller
     }
 
     public function restore($id) {
-        // if(!Auth::check()) {
-        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        // }
+
         Post::selectById($id)->withTrashed()->restore();
         return redirect('posts');
+    }
+
+    // function untuk membuat slug
+    public function makeSlug($title) {
+        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $title); // Buat slug dari judul
+
+        $uniquePrefix = substr(uniqid(), 0, 4); // Dapatkan 4 karakter unik di depan
+
+        $finalSlug = substr($uniquePrefix .'-'. $slug, 0, 30); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
+
+        return $finalSlug;
     }
 }

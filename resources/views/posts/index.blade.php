@@ -29,10 +29,11 @@
         <div class="card my-4">
             <div class="card-body">
                 <h5 class="card-title">{{ $p->title }}</h5>
-                <p class="card-text">{!! $p->content !!}</p>
-                <p class="card-text"><small class="text-muted">Created At
+                <p class="card-text">{!! substr($p->content, 0, 100) !!}</p>
+                <p class="card-text"><small class="text-muted">Created By {{ $p->postwriter->name }} At
                         {{ date("d M Y H:i", strtotime($p->created_at)) }}
                     </small> </p>
+
                 <a href="{{ url("posts/$p->slug") }}" class="btn btn-primary">Selengkapnya</a>
                 <a href="{{ url("posts/$p->slug/edit") }}" class="btn btn-warning">Edit</a>
             </div>

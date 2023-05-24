@@ -4,7 +4,9 @@
 
         <article class="blog-post mt-5">
             <h2 class="blog-post-title mb-1">{{ $post->title }}</h2>
-            <p class="blog-post-meta">{{ date('d M Y H:i', strtotime($post->created_at))  }}</p>
+            <p class="blog-post-meta"><small class="text-muted">Created By {{ $post->postwriter->name }} At
+                {{ date("d M Y H:i", strtotime($post->created_at)) }}
+            </small></p>
             <p> {!! $post->content !!}</p>
 
         </article>
