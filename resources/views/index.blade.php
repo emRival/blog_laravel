@@ -50,12 +50,12 @@
                             <h3 class="mb-0">{{ $p->title }}</h3>
                             <div class="mb-1 text-body-secondary">{{ date('d M Y H:i', strtotime($p->created_at)) }}</div>
                             <p class="card-text mb-auto">{!! Str::limit($p->content, 10, '(...)') !!}</p>
-                            <a href="#" class="stretched-link">Continue reading</a>
+                            <a href="{{ url("posts/$p->slug") }}" class="stretched-link">Continue reading</a>
                         </div>
                         <div class="col-auto d-none d-lg-block">
                             <div class="card shadow-sm">
                                 <img src="{{ url('storage/' . $p->image) }}" class="card-img-top object-fit-cover"
-                                    width="100%" height="225" alt="photo">
+                                    width="100%" height="250" alt="photo">
                             </div>
                         </div>
                     </div>

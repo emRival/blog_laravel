@@ -3,6 +3,8 @@
 @section('content')
 
     <article class="blog-post mt-5">
+        <img src="{{ url('storage/' . $post->image) }}" class="card-img-top object-fit-cover"
+        width="100%" height="350" alt="photo">
         <h2 class="blog-post-title mb-1">{{ $post->title }}</h2>
         <p class="blog-post-meta"><small class="text-muted">Created By {{ $post->postwriter->name }} At
                 {{ date('d M Y H:i', strtotime($post->created_at)) }}
@@ -30,7 +32,7 @@
     @endforeach
 
 
-
+    @if (Auth::check())
     <form class="d-flex mb-4" action="{{ route('comment') }}" method="post">
         @csrf
         <div class="input-group mb-3">
@@ -41,6 +43,9 @@
         </div>
 
     </form>
+    @endif
+
+
 
     <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
 

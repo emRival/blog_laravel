@@ -18,8 +18,8 @@ class PostController extends Controller
      */
 
      public function __construct(){
-        $this->middleware('auth');
-        $this->middleware('is_admin');
+        $this->middleware('auth')->except(['show']);
+        $this->middleware('is_admin')->except(['show']);
      }
     public function index()
     {
