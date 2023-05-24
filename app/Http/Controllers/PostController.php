@@ -73,6 +73,7 @@ class PostController extends Controller
             'content' => $request->input('konten'),
             'user_id' => Auth::user()->id,
             'slug' => $this->makeSlug($title),
+            'image' => $request->file('image')->store('berita')
         ]);
 
         return redirect('posts');
