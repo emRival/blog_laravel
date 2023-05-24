@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
-});
+    return view('index');
+})->middleware(['auth', 'verified']);
 //AUTH
 // Route::get('login', [AuthController::class, 'login'])->name('login');
 // Route::post('login', [AuthController::class, 'authenticate']);

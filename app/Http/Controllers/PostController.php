@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Validasi;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,15 +17,17 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    //  public function __construct(){
-    //     $this->middleware('auth');
-    //  }
+     public function __construct(){
+        $this->middleware('auth');
+        $this->middleware('is_admin');
+        $this->middleware('verified');
+     }
     public function index()
     {
 
-        if(!Auth::check()) {
-            return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
-        }
+        // if(!Auth::check()) {
+        //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
+        // }
 
         $posts = Post::status(true)->get();
         $total_active = $posts->count();
@@ -63,17 +66,16 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Validasi $request)
     {
         // if(!Auth::check()) {
         //     return redirect('login')->with('login_forbidden', 'PERINGATAN !!!');
         // }
-        $title = $request->input('title');
-        $content = $request->input('content');
+
 
         Post::create([
-            'title' => $title,
-            'content' => $content,
+            'title' =>$request->input('title'),
+            'content' => $request->input('konten'),
 
         ]);
 
@@ -96,7 +98,7 @@ class PostController extends Controller
         $total_comments = $comments->count();
 
 
-    
+
 
         // "SELECT * FROM posts WHERE id = $id"
         // $selected_post = Post::selectById($id)->first();

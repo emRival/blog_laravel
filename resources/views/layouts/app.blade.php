@@ -10,12 +10,15 @@
 
         {{--* bootstrap js --}}
         <script src="{{ asset('bootstrap/js/bootstrap.bundle.min.js')}}">
-        {{--* end bootsrap js --}} 
+        {{--* end bootsrap js --}}
     </script>
 
         {{--* font awesome --}}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
         {{--* end font awesome cdn --}}
+
+        {{--! ck Editor --}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/38.0.0/classic/ckeditor.js"></script>
 
 </head>
 
@@ -34,16 +37,19 @@
     <script type="text/javascript">
 
       $(document).ready(function () {
-       
+
       window.setTimeout(function() {
           $(".alert").fadeTo(1000, 0).slideUp(300, function(){
-              $(this).remove(); 
+              $(this).remove();
           });
       }, 4000);
-       
+
       });
       </script>
 
+
+
 </body>
-    
+@yield('script')
+
 </html>

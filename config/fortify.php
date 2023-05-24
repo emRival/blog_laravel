@@ -18,6 +18,8 @@ return [
 
     'guard' => 'web',
 
+    'redirects' => ['logout' => 'login'],
+
     /*
     |--------------------------------------------------------------------------
     | Fortify Password Broker
@@ -134,7 +136,7 @@ return [
     'features' => [
         Features::registration(),
         Features::resetPasswords(),
-        // Features::emailVerification(),
+        Features::emailVerification(),
         Features::updateProfileInformation(),
         Features::updatePasswords(),
         Features::twoFactorAuthentication([
