@@ -42,7 +42,7 @@
             @if (Auth::user()->role == 'admin')
             <li>
                 <a class="dropdown-item" href="{{ route("post") }}"
-            ><i class="fa-solid fa-right-from-bracket"></i> Admin Panel </a>
+            ><i class="fa-solid fa-lock"></i> Admin Panel </a>
             </li>
             @endif
 
