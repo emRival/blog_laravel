@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentControler;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LandingController;
@@ -34,5 +35,8 @@ Route::patch('posts/{slug}', [PostController::class, 'update']);
 Route::delete('posts/{id}', [PostController::class, 'destroy']);
 Route::delete('posts/{id}/permanent', [PostController::class, 'permanent_delete']);
 Route::delete('posts/{id}/restore', [PostController::class, 'restore']);
+
+//comment
+Route::post('comment', [CommentControler::class, 'comment'])->name('comment');
 
 

@@ -193,9 +193,9 @@ class PostController extends Controller
     public function makeSlug($title) {
         $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $title); // Buat slug dari judul
 
-        $uniquePrefix = substr(uniqid(), 0, 4); // Dapatkan 4 karakter unik di depan
+        $uniquePrefix = substr(uniqid(), 0, 10); // Dapatkan 4 karakter unik di depan
 
-        $finalSlug = substr($uniquePrefix .'-'. $slug, 0, 30); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
+        $finalSlug = substr($uniquePrefix .'-'. $slug, 0, 50); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
 
         return $finalSlug;
     }

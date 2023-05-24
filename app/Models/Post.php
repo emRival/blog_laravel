@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -32,10 +33,6 @@ class Post extends Model
     // }
 
 
-    public function comments() {
-        return $this->hasMany(comments::class);
-    }
-
 
     public function scopeStatus($query, $bool){
         return $query->where('active', $bool);
@@ -54,5 +51,15 @@ class Post extends Model
     public function postwriter(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get all of the comments for the Post
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(comments::class, 'post_id', 'id');
     }
 }
