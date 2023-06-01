@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateRequest;
 use App\Http\Requests\Validasi;
+use App\Models\comments;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,15 +19,17 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function __construct(){
+    public function __construct()
+    {
         $this->middleware('auth')->except(['show']);
         $this->middleware('is_admin')->except(['show']);
-     }
+        $this->middleware('is_owner')->only(['edit', 'update', 'destroy']);
+    }
     public function index()
     {
 
-
-        $posts = Post::status(true)->get();
+        $user = Auth::user()->id;
+        $posts = Post::status(true)->where('user_id', $user)->get();
         $total_active = $posts->count();
         $total_nonActive = Post::status(false)->count();
         $total_dihapus = Post::onlyTrashed()->count();
@@ -61,8 +65,10 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateRequest $request)
     {
+
+
 
 
         $title = $request->input('title'); // Ambil judul dari input
@@ -133,21 +139,31 @@ class PostController extends Controller
     public function update(Request $request, $slug)
     {
 
-        $input = $request->all();
+        $post = Post::where('slug', $slug)->first();
+        $new_slug = $this->makeSlug($request['title']);
 
-        // dd($slug, $title, $content);
 
-        // ? "UPDATE .... Where id = $id"
-        Post::where('slug', $slug)->update([
-            'title' => $input['title'],
-            'content' => $input['content'],
-            'slug' => $this->makeSlug($input['title']),
-        ]);
 
-        $slug = $this->makeSlug($input['title']);
-
-        return redirect("posts/$slug");
+        if (empty($request->image)) {
+            $post->update([
+                'title' => $request['title'],
+                'content' => $request['content'],
+                'slug' => $new_slug,
+            ]);
+            return redirect("posts/$new_slug");
+        } else {
+            Storage::delete($post->image);
+            $post->update([
+                'title' => $request['title'],
+                'content' => $request['content'],
+                'slug' => $new_slug,
+                'image' => $request->file('image')->store('berita')
+            ]);
+            return redirect("posts/$new_slug");
+        }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -159,11 +175,13 @@ class PostController extends Controller
     {
 
         Post::selectById($id)->delete();
+        comments::where('post_id', $id)->delete();
 
         return redirect('posts');
     }
 
-    public function trash() {
+    public function trash()
+    {
 
         $trash_item = Post::onlyTrashed()->get();
 
@@ -176,27 +194,32 @@ class PostController extends Controller
         return view('posts.recyclebin', $data);
     }
 
-    public function permanent_delete($id) {
+    public function permanent_delete($id)
+    {
 
 
         Post::selectById($id)->forceDelete();
+        comments::where('post_id', $id)->forceDelete();
 
         return redirect('posts/trash');
     }
 
-    public function restore($id) {
+    public function restore($id)
+    {
 
         Post::selectById($id)->withTrashed()->restore();
+        comments::where('post_id', $id)->delete();
         return redirect('posts');
     }
 
     // function untuk membuat slug
-    public function makeSlug($title) {
+    public function makeSlug($title)
+    {
         $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $title); // Buat slug dari judul
 
         $uniquePrefix = substr(uniqid(), 0, 10); // Dapatkan 4 karakter unik di depan
 
-        $finalSlug = substr($uniquePrefix .'-'. $slug, 0, 50); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
+        $finalSlug = substr($uniquePrefix . '-' . $slug, 0, 50); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
 
         return $finalSlug;
     }

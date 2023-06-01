@@ -36,6 +36,7 @@
 
                 <a href="{{ url("posts/$p->slug") }}" class="btn btn-primary">Selengkapnya</a>
                 <a href="{{ url("posts/$p->slug/edit") }}" class="btn btn-warning">Edit</a>
+
             </div>
         </div>
         @endforeach

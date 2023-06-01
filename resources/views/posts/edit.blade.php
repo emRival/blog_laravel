@@ -3,7 +3,7 @@
 @section('content')
         <h1 class="my-4">Edit Postingan</h1>
 
-        <form method="post" action="{{ url("posts/$post->slug") }}">
+        <form method="post" action="{{ url("posts/$post->slug") }}" enctype="multipart/form-data">
             @method('patch')
             @csrf
             <div class="mb-3">
@@ -15,6 +15,10 @@
                 <textarea class="form-control" id="content" rows="3" name="content" value="{{ $post->content }}"
                     required>{{ $post->content }}</textarea>
             </div>
+            <div class="mb-3">
+                <label class="form-label">Gambar</label>
+                <input type='file' class="form-control" rows="3" name="image">
+            </div>
             <button type="submit" class="btn btn-primary">Simpan</button>
 
             <button type="button"class="btn btn-danger my-4" data-bs-toggle="modal" data-bs-target="#exampleModal">Hapus</button>
@@ -25,9 +29,9 @@
              {{-- <form action="{{ url("posts/$post->id")}}" method="post">
                 @method('DELETE')
                 @csrf
-    
-                
-    
+
+
+
             </form> --}}
 
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -38,7 +42,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          Apakah Anda yakin Untuk Menghapus Postingan "<span class="text-danger fw-bold">{{ $post->title }}</span>" 
+          Apakah Anda yakin Untuk Menghapus Postingan "<span class="text-danger fw-bold">{{ $post->title }}</span>"
         </div>
         <div class="modal-footer">
             <form action="{{ url("posts/$post->id")}}" method="post">
@@ -51,4 +55,14 @@
       </div>
     </div>
   </div>
+@endsection
+
+@section('script')
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#content'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
 @endsection

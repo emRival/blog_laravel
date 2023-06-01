@@ -15,7 +15,7 @@
 
     <p class="text-muted">{{ $total_comments }} Komentar</p>
 
-    @foreach ($comments->take(3) as $comment)
+    @foreach ($comments->take(1) as $comment)
         <div class="card mb-3">
             <div class="card-header text-primary">
                 &#64;{{ $comment->commentwriter->name }}
@@ -30,14 +30,14 @@
         </div>
     @endforeach
 
-    @if ($comments->count() > 3)
+    @if ($comments->count() > 1)
 
-    <div class="position-relative">
-        <a class="position-absolute top-50 start-50 translate-middle" id="showAllComments">Show All Comments</a>
-    </div>
+        <div class="position-relative">
+            <a class="position-absolute top-50 start-50 translate-middle" id="showAllComments">Show All Comments</a>
+        </div>
 
         <div id="hiddenComments" style="display: none;">
-            @foreach ($comments->skip(3) as $comment)
+            @foreach ($comments->skip(1) as $comment)
                 <div class="card mb-3">
                     <div class="card-header text-primary">
                         &#64;{{ $comment->commentwriter->name }}
@@ -68,8 +68,7 @@
         <form class="d-flex my-5" action="{{ route('comment') }}" method="post">
             @csrf
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="comment"
-                    placeholder="Recipient's username">
+                <input type="text" class="form-control" name="comment" placeholder="Recipient's username">
                 <input type="hidden" name="post_id" value="{{ $post->id }}">
                 <button class="btn btn-outline-secondary" type="submit"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
@@ -78,10 +77,13 @@
     @endif
 
 
-    @if (Auth::check())
-    <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
+    @if (Auth::user()->role == 'admin')
+        <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
+        @if (Auth::user()->id == $post->user_id)
+            <a href="{{ url("posts/$post->slug/edit") }}" class="btn btn-info">Edit</a>
+        @endif
     @else
-    <a href="{{ url('/') }}" class="btn btn-success">Kembali</a>
+        <a href="{{ url('/') }}" class="btn btn-success">Kembali</a>
     @endif
 
 
