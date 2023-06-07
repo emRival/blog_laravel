@@ -76,15 +76,18 @@
         </form>
     @endif
 
+    @if (Auth::check())
+        @if (Auth::user()->role == 'admin')
+            <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
+            @if (Auth::user()->id == $post->user_id)
+                <a href="{{ url("posts/$post->slug/edit") }}" class="btn btn-info">Edit</a>
+            @endif
 
-    @if (Auth::user()->role == 'admin')
-        <a href="{{ url('posts') }}" class="btn btn-success">Kembali</a>
-        @if (Auth::user()->id == $post->user_id)
-            <a href="{{ url("posts/$post->slug/edit") }}" class="btn btn-info">Edit</a>
         @endif
     @else
         <a href="{{ url('/') }}" class="btn btn-success">Kembali</a>
     @endif
+
 
 
 
