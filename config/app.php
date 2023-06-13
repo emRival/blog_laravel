@@ -108,8 +108,11 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'timezone' => 'Asia/Jakarta',
 
+    'locale' => 'id',
+
+    'faker_locale' => 'id_ID',
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

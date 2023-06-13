@@ -29,7 +29,7 @@ class PostController extends Controller
     {
 
         $user = Auth::user()->id;
-        $posts = Post::status(true)->where('user_id', $user)->get();
+        $posts = Post::status(true)->where('user_id', $user)->latest()->get();
         $total_active = $posts->count();
         $total_nonActive = Post::status(false)->count();
         $total_dihapus = Post::onlyTrashed()->count();
@@ -68,17 +68,10 @@ class PostController extends Controller
     public function store(CreateRequest $request)
     {
 
-
-
-
-        $title = $request->input('title'); // Ambil judul dari input
-
-
         Post::create([
-            'title' => $title,
-            'content' => $request->input('konten'),
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
             'user_id' => Auth::user()->id,
-            'slug' => $this->makeSlug($title),
             'image' => $request->file('image')->store('berita')
         ]);
 
@@ -93,21 +86,13 @@ class PostController extends Controller
      */
     public function show($slug)
     {
-
-        $selected_post = Post::where('slug', $slug)->first();
-        $comments = $selected_post->comments()->get();
+        $post = Post::where('slug', $slug)->first();
+        $comments = $post->comments()->get();
         $total_comments = $comments->count();
 
-        $data = [
-            'post'               => $selected_post,
-            'comments'           => $comments,
-            'total_comments'     => $total_comments
-        ];
-
-
-
-        return view('posts.show', $data);
+        return view('posts.show', compact('post', 'comments', 'total_comments'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -120,13 +105,7 @@ class PostController extends Controller
 
         $selected_post = Post::where('slug', $slug)->first();
 
-
-
-        $data = [
-            'post' => $selected_post
-        ];
-
-        return view('posts.edit', $data);
+        return view('posts.edit', compact('selected_post'));
     }
 
     /**
@@ -137,31 +116,25 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $slug)
-    {
+{
+    $post = Post::where('slug', $slug)->firstOrFail();
+    $post->slug = null;
 
-        $post = Post::where('slug', $slug)->first();
-        $new_slug = $this->makeSlug($request['title']);
+    $data = [
+        'title' => $request->input('title'),
+        'content' => $request->input('content'),
+    ];
 
-
-
-        if (empty($request->image)) {
-            $post->update([
-                'title' => $request['title'],
-                'content' => $request['content'],
-                'slug' => $new_slug,
-            ]);
-            return redirect("posts/$new_slug");
-        } else {
-            Storage::delete($post->image);
-            $post->update([
-                'title' => $request['title'],
-                'content' => $request['content'],
-                'slug' => $new_slug,
-                'image' => $request->file('image')->store('berita')
-            ]);
-            return redirect("posts/$new_slug");
-        }
+    if ($request->hasFile('image')) {
+        Storage::delete($post->image);
+        $data['image'] = $request->file('image')->store('berita');
     }
+
+    $post->update($data);
+
+    return redirect("posts/$post->slug");
+}
+
 
 
 
@@ -210,17 +183,5 @@ class PostController extends Controller
         Post::selectById($id)->withTrashed()->restore();
         comments::where('post_id', $id)->delete();
         return redirect('posts');
-    }
-
-    // function untuk membuat slug
-    public function makeSlug($title)
-    {
-        $slug = preg_replace('/[^A-Za-z0-9-]+/', '-', $title); // Buat slug dari judul
-
-        $uniquePrefix = substr(uniqid(), 0, 10); // Dapatkan 4 karakter unik di depan
-
-        $finalSlug = substr($uniquePrefix . '-' . $slug, 0, 50); // Gabungkan karakter unik dan slug, batasi menjadi 10 karakter
-
-        return $finalSlug;
     }
 }

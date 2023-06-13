@@ -17,11 +17,11 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Konten</label>
-            <textarea type='text' class="form-control" id="content" rows="3" name="konten"></textarea>
+            <textarea type='text' class="form-control" id="content" rows="3" name="content"></textarea>
         </div>
         <div class="mb-3">
             <label class="form-label">Gambar</label>
-            <input type='file' class="form-control" id="content" rows="3" name="image">
+            <input type='file' class="form-control"  rows="3"  name="image" accept="image/*">
         </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
 
